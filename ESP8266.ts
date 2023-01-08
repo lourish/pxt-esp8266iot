@@ -174,6 +174,18 @@ namespace ESP8266_IoT {
     }
 
     /**
+     * Connect to ThingSpeak and set data.
+     */
+    //% block="read data from ThingSpeak | Read API key = %read_api_key|Channel ID = %channel_id | Field Number = %fieldNum|"
+    //% read_api_key.defl=your_channel_read_api_key
+    //% expandableArgumentMode="enabled"
+    //% subcategory="ThingSpeak" weight=85
+    export function getData(read_api_key: string, channel_id: string = 0, fieldNum: number = 0) {
+        TStoSendStr = `GET /channels/${channel_id}/fields/${fieldNum}.json?api_key=${read_api_key}`
+    }
+
+
+    /**
      * upload data. It would not upload anything if it failed to connect to Wifi or ThingSpeak.
      */
     //% block="Upload data to ThingSpeak"
@@ -181,6 +193,17 @@ namespace ESP8266_IoT {
     export function uploadData() {
         sendAT(`AT+CIPSEND=${TStoSendStr.length + 2}`, 300)
         sendAT(TStoSendStr, 300) // upload data
+    }
+
+    /**
+     * download data. It would not download anything if it failed to connect to Wifi or ThingSpeak.
+     */
+    //% block="Download data to ThingSpeak"
+    //% subcategory="ThingSpeak" weight=80
+    export function downloadData() {
+        sendAT(`AT+CIPSEND=${TStoSendStr.length + 2}`, 300)
+        sendAT(TStoSendStr, 300)
+        //todo: write response data to string
     }
 
     /**
